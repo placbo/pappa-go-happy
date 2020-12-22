@@ -8,6 +8,10 @@ const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
     physics: {
         default: 'arcade',
         arcade: {
@@ -58,7 +62,6 @@ function create() {
     sprite.setInteractive();
     sprite.on('pointerover', function () {
         sprite.setTint('0x00ff00');
-        console.log("kfds");
     });
     sprite.on('pointerout', function () {
         sprite.clearTint();
@@ -69,3 +72,5 @@ function update() {
 }
 
 const game = new Phaser.Game(config);
+game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+
