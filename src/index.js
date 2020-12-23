@@ -12,9 +12,9 @@ class MyScene extends Phaser.Scene {
 
     constructor(config) {
         super(config);
-        this.timeLeft = 10;
+        this.timeLeft = 100;
         this.score = 0;
-        this.stars = [];
+        this.stars = null;
     }
 
     preload() {
@@ -36,13 +36,42 @@ class MyScene extends Phaser.Scene {
             .setInteractive({useHandCursor: true})
             .on("pointerup", () => {
                 this.splashScreen.destroy();
+                this.startCountDownTimer();
                 this.startLevel1();
             });
+    }
+
+
+    startCountDownTimer() {
+        this.time.addEvent({
+            delay: 1000, callback: () => {
+                this.timeLeft -= 1; // One second
+                this.timerText.setText("Time left: " + this.timeLeft);
+                if (this.timeLeft === 0) {
+                    this.gameOver();
+                    this.time.removeAllEvents();
+                }
+            }, callbackScope: this, loop: true
+        });
+
     }
 
     updateScore() {
         this.scoreText.setText(`Score: ${this.score}`);
     }
+
+
+    gameOver() {
+        this.input.setDefaultCursor('default');
+        this.add.rectangle(0, 0, 800, 600, Phaser.Display.Color.HexStringToColor('#ffffff').color)
+            .setOrigin(0,0);
+        this.add.text(100, 100, "You suck!", {
+            fontFamily: "Arial Black",
+            fontSize: 100,
+            color: "#00ff00"
+        }).setStroke('#de77ae', 4);
+    }
+
 
     /*****************  LEVEL 1 **********************/
 
@@ -59,22 +88,9 @@ class MyScene extends Phaser.Scene {
         this.drawJulie();
     }
 
-    level1Fail() {
-        this.input.setDefaultCursor('default');
-        this.add.text(100, 100, "You suck!", {
-            fontFamily: "Arial Black",
-            fontSize: 100,
-            color: "#00ff00"
-        }).setStroke('#de77ae', 4);
-        //TODO: destroy stars
-        //TODO: show restart level
-
-    }
-
     level1Win() {
-        this.time.removeAllEvents();
         this.input.setDefaultCursor('default');
-        this.add.text(100, 100, "You dit it, sjø!", {
+        const winningText = this.add.text(100, 100, "You dit it, sjø!", {
             fontFamily: "Arial Black",
             fontSize: 100,
             color: "#ffff00"
@@ -86,7 +102,7 @@ class MyScene extends Phaser.Scene {
             .on("pointerdown", () => {
                 this.startLevel2();
                 this.nextLevelIcon.destroy();
-                //todo ? destroy all level1-stuff?
+                winningText.destroy();
             });
     }
 
@@ -108,39 +124,28 @@ class MyScene extends Phaser.Scene {
     drawStarsAndStartShootingGame() {
         this.input.setDefaultCursor('cell');
 
-        this.timerText = this.add.text(650, 10, "Time left: " + this.timeLeft, {
-            fontFamily: "Arial Black",
-            fontSize: 24,
-            color: "#c51b7d",
-            align: 'center'
-        }).setStroke('#de77ae', 4);
-        this.time.addEvent({
-            delay: 1000, callback: () => {
-                this.timeLeft -= 1; // One second
-                this.timerText.setText("Time left: " + this.timeLeft);
-                if (this.timeLeft === 0) {
-                    this.level1Fail();
-                    this.time.removeAllEvents();
-                }
-            }, callbackScope: this, loop: true
-        });
 
-        const numberOfStars = 1;
+        this.stars = this.add.group();
+        const numberOfStars = 4;
         let starsLeft = numberOfStars;
         for (let i = 0; i < numberOfStars; i++) {
-            this.stars.push(this.add.sprite(100, 100 + (50 * i), "star").setInteractive());
+            this.stars.create(100, 100 + (50 * i), 'star').setInteractive();
+            //this.stars.push(this.add.sprite(100, 100 + (50 * i), "star").setInteractive());
         }
-        this.tweens.add({
-            x: 600,
-            targets: this.stars,
-            duration: 3000,
-            flipX: true,
-            yoyo: true,
-            repeat: -1,
-            delay: function (target, key, value, targetIndex) {
-                return targetIndex * Math.random() * 1000;
-            }
-        })
+
+        this.stars.children.iterate((child) => {
+            this.tweens.add({
+                targets: child,
+                x: 600,
+                duration: 3000,
+                flipX: true,
+                yoyo: true,
+                repeat: -1,
+                delay: Math.random() * 1000
+
+            });
+        });
+
         this.input.on('gameobjectdown', (pointer, gameObject) => {
             gameObject.destroy();
             this.score++;
@@ -163,6 +168,12 @@ class MyScene extends Phaser.Scene {
             align: 'center'
         }).setStroke('#de77ae', 4);
         this.updateScore();
+        this.timerText = this.add.text(650, 10, "Time left: " + this.timeLeft, {
+            fontFamily: "Arial Black",
+            fontSize: 24,
+            color: "#c51b7d",
+            align: 'center'
+        }).setStroke('#de77ae', 4);
     }
 
 
