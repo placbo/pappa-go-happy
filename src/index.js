@@ -10,7 +10,7 @@ class MyScene extends Phaser.Scene {
 
     constructor(config) {
         super(config);
-
+        this.timeLeft = 10;
         this.score = 0;
     }
 
@@ -23,6 +23,16 @@ class MyScene extends Phaser.Scene {
 
 
     create() {
+        this.time.addEvent({
+            delay: 1000, callback: () => {
+                this.timeLeft -= 1; // One second
+                this.timerText.setText(this.timeLeft);
+                if (this.timeLeft === 0) {
+                    this.gameOver();
+                    this.time.removeAllEvents();
+                }
+            }, callbackScope: this, loop: true
+        });
         this.input.setDefaultCursor('cell');
         this.drawLevel1();
         this.drawHeader();
@@ -30,6 +40,22 @@ class MyScene extends Phaser.Scene {
 
     updateScore() {
         this.scoreText.setText(`Score: ${this.score}`);
+    }
+
+    gameOver() {
+        this.add.text(100, 100, "Game Over!", {
+            fontFamily: "Arial Black",
+            fontSize: 100,
+            color: "#00ff00"
+        }).setStroke('#de77ae', 4);
+    }
+
+    gameWin() {
+        this.add.text(100, 100, "You win!", {
+            fontFamily: "Arial Black",
+            fontSize: 100,
+            color: "#ffff00"
+        }).setStroke('#de77ae', 4);
     }
 
     drawJulie() {
@@ -40,13 +66,12 @@ class MyScene extends Phaser.Scene {
             duration: 1000,
             yoyo: true,
             repeat: -1,
-            onUpdate:  (tween) => {
+            onUpdate: (tween) => {
                 julieHead.setAngle(tween.getValue());
             }
         });
         let body = this.add.image(600, 400, 'body');
         body.setScale(1.5, 1.5);
-
     }
 
     drawStars() {
@@ -64,14 +89,18 @@ class MyScene extends Phaser.Scene {
             this.score++;
             this.updateScore();
         });
-        star2.setInteractive().on('pointerdown',  ()=> {
+        star2.setInteractive().on('pointerdown', () => {
             star2.destroy();
             this.score++;
             this.updateScore();
         });
-
     }
 
+    update(time, delta) {
+        if (this.score >= 2) {
+            this.gameWin();
+        }
+    }
 
     drawHeader() {
         const graphics = this.add.graphics();
@@ -85,6 +114,13 @@ class MyScene extends Phaser.Scene {
             align: 'center'
         }).setStroke('#de77ae', 4);
         this.updateScore();
+
+        this.timerText = this.add.text(750, 10, this.timeLeft, {
+            fontFamily: "Arial Black",
+            fontSize: 24,
+            color: "#c51b7d",
+            align: 'center'
+        }).setStroke('#de77ae', 4);
     }
 
     drawLevel1() {
