@@ -5,6 +5,7 @@ import julieBody from './assets/body.png';
 import star from './assets/star.png';
 import splash from './assets/splash.png';
 import gun from './assets/gun.png';
+import cupid from './assets/cupid.png';
 import nextLevelArrow from './assets/right-arrow.png';
 
 
@@ -13,6 +14,7 @@ class MyScene extends Phaser.Scene {
     constructor(config) {
         super(config);
         this.timeLeft = 100;
+        this.enableCountdown = false;
         this.score = 0;
     }
 
@@ -24,10 +26,15 @@ class MyScene extends Phaser.Scene {
         this.load.image('splash', splash);
         this.load.image('gun', gun);
         this.load.image('nextLevelArrow', nextLevelArrow);
+        this.load.image('cupid', cupid);
     }
 
     create() {
-        this.runIntro();
+        this.physics.world.setBoundsCollision(true, true, true, true);
+
+        this.startLevel2();
+
+        // this.runIntro();
     }
 
     runIntro() {
@@ -40,25 +47,25 @@ class MyScene extends Phaser.Scene {
             });
     }
 
-
     startCountDownTimer() {
-        this.time.addEvent({
-            delay: 1000, callback: () => {
-                this.timeLeft -= 1; // One second
-                this.timerText.setText("Time left: " + this.timeLeft);
-                if (this.timeLeft === 0) {
-                    this.gameOver();
-                    this.time.removeAllEvents();
-                }
-            }, callbackScope: this, loop: true
-        });
+        if (this.enableCountdown) {
+            this.time.addEvent({
+                delay: 1000, callback: () => {
+                    this.timeLeft -= 1; // One second
+                    this.timerText.setText("Time left: " + this.timeLeft);
+                    if (this.timeLeft === 0) {
+                        this.gameOver();
+                        this.time.removeAllEvents();
+                    }
+                }, callbackScope: this, loop: true
+            });
+        }
 
     }
 
     updateScore() {
         this.scoreText.setText(`Score: ${this.score}`);
     }
-
 
     gameOver() {
         this.input.setDefaultCursor('default');
@@ -76,7 +83,7 @@ class MyScene extends Phaser.Scene {
 
     startLevel1() {
         this.add.image(400, 300, 'background').setScale(0.7, 0.7);
-        this.drawHeader();
+        this.drawHeader("Level 1");
         this.gun = this.add.sprite(300, 510, "gun")
             .setScale(0.2)
             .setInteractive({useHandCursor: true})
@@ -124,7 +131,7 @@ class MyScene extends Phaser.Scene {
         this.input.setDefaultCursor('cell');
         this.stars = this.add.group();
 
-        const numberOfStars = 4;
+        const numberOfStars = 1;
         let starsLeft = numberOfStars;
         for (let i = 0; i < numberOfStars; i++) {
             this.stars.create(100, 100 + (50 * i), 'star').setInteractive();
@@ -140,7 +147,6 @@ class MyScene extends Phaser.Scene {
                 yoyo: true,
                 repeat: -1,
                 delay: Math.random() * 1000
-
             });
         });
 
@@ -155,7 +161,7 @@ class MyScene extends Phaser.Scene {
         }, this);
     }
 
-    drawHeader() {
+    drawHeader(headerText) {
         const graphics = this.add.graphics();
         graphics.fillStyle(0x440044, 1);
         graphics.fillRect(0, 0, 800, 50);
@@ -172,21 +178,116 @@ class MyScene extends Phaser.Scene {
             color: "#c51b7d",
             align: 'center'
         }).setStroke('#de77ae', 4);
+
+        this.add.text(250, 10, headerText, {
+            fontFamily: "Arial Black",
+            fontSize: 24,
+            color: "#c51b7d",
+            align: 'center'
+        }).setStroke('#de77ae', 4);
+
     }
 
 
     /*****************  LEVEL 2 **********************/
 
     startLevel2() {
-        let background = this.add.image(400, 300, 'background');
-        background.setScale(0.4, 0.4).setFlipX(true);
-        console.log("level2");
-        this.add.text(200, 200, "Level 2", {
-            fontFamily: "Arial Black",
-            fontSize: 150,
-            color: "#00ff00"
-        }).setStroke('#de77ae', 4);
+        const background = this.add.image(400, 300, 'background')
+            .setScale(0.8, 0.8)
+            .setFlipX(true);
+        this.drawHeader("Level 2");
+        this.level2_cupid = this.add.sprite(700, 150, 'cupid')
+            .setScale(0.05)
+            .setAngle(280)
+            .setOrigin(0.2);
+        this.level2_julie = this.physics.add.sprite(100, 400, 'julie')
+            .setScale(0.1)
+            .setFlipX(true);
+        let arrowAngle = 0;
+        this.level2_arrow = this.physics.add.sprite(700, 150, 'julie')
+            .setScale(0.2)
+            .setAngle(arrowAngle)
+            .setGravityY(40)
+            .setCollideWorldBounds(true)
+            .disableBody(true, true);
+        this.level2_arrow.body.onWorldBounds = true;
+        let won = false;
+        let readyForNewArrow= true;
+
+        //Add animation on cupid
+        this.tweens.addCounter({
+            targets: this.level2_cupid,
+            from: 280,
+            to: 350,
+            duration: 2000,
+            yoyo: true,
+            ease: 'Sine.easeInOut',
+            repeat: -1,
+            // delay: Math.random() * 1000,
+            delay: Math.random() * 1000,
+            onUpdate: (tween) => {
+                this.level2_cupid.setAngle(tween.getValue());
+                arrowAngle = tween.getValue();
+            }
+        });
+
+        this.physics.world.on("worldbounds", (body) => {
+            if (body.gameObject === this.level2_arrow) {
+                body.gameObject.disableBody(true, true);
+                readyForNewArrow = true;
+            }
+        });
+
+
+        //todo: click to start level
+
+        this.input.on('pointerup', (pointer) => {
+            if (!won && readyForNewArrow) {
+                readyForNewArrow = false;
+                this.level2_arrow.enableBody(true, 700, 150, true, true).setAngle(arrowAngle);
+                this.physics.velocityFromAngle(arrowAngle + 180, 200, this.level2_arrow.body.velocity);
+                this.physics.add.collider(this.level2_arrow, this.level2_julie, (noe) => {
+                    console.log("HIT!", noe)
+                    this.level2_julie.destroy();
+                    this.level2_arrow.destroy();
+                    this.level2_cupid.destroy();
+                    //this.level2_arrow.disableBody(true,true);
+                    this.level2Win();
+                    won = true;
+                }, null, this);
+            }
+        });
+
+        //add animation on julie
+        this.level2_julie.scene.tweens.add({
+            targets: this.level2_julie,
+            x: 700,
+            angle: 1080,
+            duration: 5000,
+            ease: 'Sine.easeInOut',
+            repeat: -1,
+            yoyo: true,
+            flipX: true,
+        });
     }
+
+    level2Win() {
+        const winningText = this.add.text(100, 100, "You dit it again, sjø!", {
+            fontFamily: "Arial Black",
+            fontSize: 100,
+            color: "#ffff00"
+        }).setStroke('#de77ae', 4);
+        //TODO: show happyPer
+        this.nextLevelIcon = this.add.image(700, 550, 'nextLevelArrow')
+            .setScale(0.1)
+            .setInteractive({useHandCursor: true})
+            .on("pointerdown", () => {
+                this.startLevel1();
+                this.nextLevelIcon.destroy();
+                winningText.destroy();
+            });
+    }
+
 
 }
 
@@ -202,7 +303,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: {y: 300},
+            gravity: {y: 0},
             debug: false
 
         }
