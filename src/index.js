@@ -14,7 +14,6 @@ class MyScene extends Phaser.Scene {
         super(config);
         this.timeLeft = 100;
         this.score = 0;
-        this.stars = null;
     }
 
     preload() {
@@ -123,9 +122,8 @@ class MyScene extends Phaser.Scene {
 
     drawStarsAndStartShootingGame() {
         this.input.setDefaultCursor('cell');
-
-
         this.stars = this.add.group();
+
         const numberOfStars = 4;
         let starsLeft = numberOfStars;
         for (let i = 0; i < numberOfStars; i++) {
