@@ -9,14 +9,43 @@ import cupid from './assets/cupid.png';
 import nextLevelArrow from './assets/right-arrow.png';
 
 
-class MyScene extends Phaser.Scene {
+class Intro extends Phaser.Scene {
 
-    constructor(config) {
-        super(config);
+    constructor() {
+        super({
+            key: 'Intro'
+        })
+    }
+
+    preload() {
+        this.load.image('splash', splash);
+    }
+
+    create() {
+        this.runIntro();
+    }
+
+    runIntro() {
+        this.splashScreen = this.add.image(400, 300, 'splash')
+            .setInteractive({useHandCursor: true})
+            .on("pointerup", () => {
+                this.scene.start('Level1')
+            });
+    }
+
+}
+
+class Level1 extends Phaser.Scene {
+
+    constructor() {
+        super({
+            key: 'Level1'
+        })
         this.timeLeft = 100;
         this.enableCountdown = false;
         this.score = 0;
     }
+
 
     preload() {
         this.load.image('background', background);
@@ -288,7 +317,6 @@ class MyScene extends Phaser.Scene {
             });
     }
 
-
 }
 
 
@@ -308,7 +336,7 @@ const config = {
 
         }
     },
-    scene: [MyScene]
+    scene: [Intro, Level1]
 };
 
 const game = new Phaser.Game(config);
