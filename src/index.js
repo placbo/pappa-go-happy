@@ -41,9 +41,9 @@ class Level1 extends Phaser.Scene {
         super({
             key: 'Level1'
         })
-        this.timeLeft = 100;
-        this.enableCountdown = false;
-        this.score = 0;
+        // this.timeLeft = 100;
+        // this.enableCountdown = false;
+        // this.score = 0;
     }
 
 
@@ -52,65 +52,15 @@ class Level1 extends Phaser.Scene {
         this.load.image('julie', julieHead);
         this.load.image('body', julieBody);
         this.load.image('star', star);
-        this.load.image('splash', splash);
         this.load.image('gun', gun);
         this.load.image('nextLevelArrow', nextLevelArrow);
         this.load.image('cupid', cupid);
     }
 
     create() {
-        this.physics.world.setBoundsCollision(true, true, true, true);
-
-        this.startLevel2();
-
-        // this.runIntro();
-    }
-
-    runIntro() {
-        this.splashScreen = this.add.image(400, 300, 'splash')
-            .setInteractive({useHandCursor: true})
-            .on("pointerup", () => {
-                this.splashScreen.destroy();
-                this.startCountDownTimer();
-                this.startLevel1();
-            });
-    }
-
-    startCountDownTimer() {
-        if (this.enableCountdown) {
-            this.time.addEvent({
-                delay: 1000, callback: () => {
-                    this.timeLeft -= 1; // One second
-                    this.timerText.setText("Time left: " + this.timeLeft);
-                    if (this.timeLeft === 0) {
-                        this.gameOver();
-                        this.time.removeAllEvents();
-                    }
-                }, callbackScope: this, loop: true
-            });
-        }
-
-    }
-
-    updateScore() {
-        this.scoreText.setText(`Score: ${this.score}`);
-    }
-
-    gameOver() {
-        this.input.setDefaultCursor('default');
-        this.add.rectangle(0, 0, 800, 600, Phaser.Display.Color.HexStringToColor('#ffffff').color)
-            .setOrigin(0,0);
-        this.add.text(100, 100, "You suck!", {
-            fontFamily: "Arial Black",
-            fontSize: 100,
-            color: "#00ff00"
-        }).setStroke('#de77ae', 4);
-    }
+        this.physics.world.setBoundsCollision(true, true, true, true); //level2
 
 
-    /*****************  LEVEL 1 **********************/
-
-    startLevel1() {
         this.add.image(400, 300, 'background').setScale(0.7, 0.7);
         this.drawHeader("Level 1");
         this.gun = this.add.sprite(300, 510, "gun")
@@ -121,11 +71,45 @@ class Level1 extends Phaser.Scene {
                 this.gun.destroy();
             })
         this.drawJulie();
+
     }
+
+
+    // startCountDownTimer() {
+    //     if (this.enableCountdown) {
+    //         this.time.addEvent({
+    //             delay: 1000, callback: () => {
+    //                 this.timeLeft -= 1; // One second
+    //                 this.timerText.setText("Time left: " + this.timeLeft);
+    //                 if (this.timeLeft === 0) {
+    //                     this.gameOver();
+    //                     this.time.removeAllEvents();
+    //                 }
+    //             }, callbackScope: this, loop: true
+    //         });
+    //     }
+    //
+    // }
+
+    // updateScore() {
+    //     this.scoreText.setText(`Score: ${this.score}`);
+    // }
+
+    // gameOver() {
+    //     this.input.setDefaultCursor('default');
+    //     this.add.rectangle(0, 0, 800, 600, Phaser.Display.Color.HexStringToColor('#ffffff').color)
+    //         .setOrigin(0,0);
+    //     this.add.text(100, 100, "You suck!", {
+    //         fontFamily: "Arial Black",
+    //         fontSize: 100,
+    //         color: "#00ff00"
+    //     }).setStroke('#de77ae', 4);
+    // }
+
 
     level1Win() {
         this.input.setDefaultCursor('default');
-        const winningText = this.add.text(100, 100, "You dit it, sjø!", {
+        this.add.text(100, 100, "You dit it, sjø!", {
             fontFamily: "Arial Black",
             fontSize: 100,
             color: "#ffff00"
@@ -135,9 +119,7 @@ class Level1 extends Phaser.Scene {
             .setScale(0.1)
             .setInteractive({useHandCursor: true})
             .on("pointerdown", () => {
-                this.startLevel2();
-                this.nextLevelIcon.destroy();
-                winningText.destroy();
+                this.scene.start('Level2')
             });
     }
 
@@ -160,7 +142,7 @@ class Level1 extends Phaser.Scene {
         this.input.setDefaultCursor('cell');
         this.stars = this.add.group();
 
-        const numberOfStars = 1;
+        const numberOfStars = 2;
         let starsLeft = numberOfStars;
         for (let i = 0; i < numberOfStars; i++) {
             this.stars.create(100, 100 + (50 * i), 'star').setInteractive();
@@ -181,8 +163,8 @@ class Level1 extends Phaser.Scene {
 
         this.input.on('gameobjectdown', (pointer, gameObject) => {
             gameObject.destroy();
-            this.score++;
-            this.updateScore();
+            // this.score++;
+            // this.updateScore();
             starsLeft--;
             if (starsLeft === 0) {
                 this.level1Win();
@@ -194,19 +176,19 @@ class Level1 extends Phaser.Scene {
         const graphics = this.add.graphics();
         graphics.fillStyle(0x440044, 1);
         graphics.fillRect(0, 0, 800, 50);
-        this.scoreText = this.add.text(10, 10, "", {
-            fontFamily: "Arial Black",
-            fontSize: 24,
-            color: "#c51b7d",
-            align: 'center'
-        }).setStroke('#de77ae', 4);
-        this.updateScore();
-        this.timerText = this.add.text(650, 10, "Time left: " + this.timeLeft, {
-            fontFamily: "Arial Black",
-            fontSize: 24,
-            color: "#c51b7d",
-            align: 'center'
-        }).setStroke('#de77ae', 4);
+        // this.scoreText = this.add.text(10, 10, "", {
+        //     fontFamily: "Arial Black",
+        //     fontSize: 24,
+        //     color: "#c51b7d",
+        //     align: 'center'
+        // }).setStroke('#de77ae', 4);
+        // this.updateScore();
+        // this.timerText = this.add.text(650, 10, "Time left: " + this.timeLeft, {
+        //     fontFamily: "Arial Black",
+        //     fontSize: 24,
+        //     color: "#c51b7d",
+        //     align: 'center'
+        // }).setStroke('#de77ae', 4);
 
         this.add.text(250, 10, headerText, {
             fontFamily: "Arial Black",
@@ -217,10 +199,30 @@ class Level1 extends Phaser.Scene {
 
     }
 
+}
 
-    /*****************  LEVEL 2 **********************/
+class Level2 extends Phaser.Scene {
 
-    startLevel2() {
+    constructor() {
+        super({
+            key: 'Level2'
+        })
+    }
+
+    preload() {
+        this.load.image('background', background);
+        this.load.image('julie', julieHead);
+        this.load.image('body', julieBody);
+        this.load.image('star', star);
+        this.load.image('gun', gun);
+        this.load.image('nextLevelArrow', nextLevelArrow);
+        this.load.image('cupid', cupid);
+    }
+
+
+    create() {
+        this.physics.world.setBoundsCollision(true, true, true, true); //level2
+
         const background = this.add.image(400, 300, 'background')
             .setScale(0.8, 0.8)
             .setFlipX(true);
@@ -241,7 +243,7 @@ class Level1 extends Phaser.Scene {
             .disableBody(true, true);
         this.level2_arrow.body.onWorldBounds = true;
         let won = false;
-        let readyForNewArrow= true;
+        let readyForNewArrow = true;
 
         //Add animation on cupid
         this.tweens.addCounter({
@@ -301,20 +303,30 @@ class Level1 extends Phaser.Scene {
     }
 
     level2Win() {
-        const winningText = this.add.text(100, 100, "You dit it again, sjø!", {
+        this.add.text(100, 100, "You dit it again, sjø!", {
             fontFamily: "Arial Black",
             fontSize: 100,
             color: "#ffff00"
         }).setStroke('#de77ae', 4);
         //TODO: show happyPer
-        this.nextLevelIcon = this.add.image(700, 550, 'nextLevelArrow')
+        this.add.image(700, 550, 'nextLevelArrow')
             .setScale(0.1)
             .setInteractive({useHandCursor: true})
             .on("pointerdown", () => {
-                this.startLevel1();
-                this.nextLevelIcon.destroy();
-                winningText.destroy();
+                console.log("start level 3")
             });
+    }
+
+    drawHeader(headerText) {
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0x440044, 1);
+        graphics.fillRect(0, 0, 800, 50);
+        this.add.text(250, 10, headerText, {
+            fontFamily: "Arial Black",
+            fontSize: 24,
+            color: "#c51b7d",
+            align: 'center'
+        }).setStroke('#de77ae', 4);
     }
 
 }
@@ -336,7 +348,7 @@ const config = {
 
         }
     },
-    scene: [Intro, Level1]
+    scene: [Intro, Level1, Level2]
 };
 
 const game = new Phaser.Game(config);
