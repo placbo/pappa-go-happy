@@ -58,11 +58,7 @@ class Level1 extends Phaser.Scene {
     }
 
     create() {
-        this.physics.world.setBoundsCollision(true, true, true, true); //level2
-
-
         this.add.image(400, 300, 'background').setScale(0.7, 0.7);
-        this.drawHeader("Level 1");
         this.gun = this.add.sprite(300, 510, "gun")
             .setScale(0.2)
             .setInteractive({useHandCursor: true})
@@ -75,36 +71,6 @@ class Level1 extends Phaser.Scene {
     }
 
 
-    // startCountDownTimer() {
-    //     if (this.enableCountdown) {
-    //         this.time.addEvent({
-    //             delay: 1000, callback: () => {
-    //                 this.timeLeft -= 1; // One second
-    //                 this.timerText.setText("Time left: " + this.timeLeft);
-    //                 if (this.timeLeft === 0) {
-    //                     this.gameOver();
-    //                     this.time.removeAllEvents();
-    //                 }
-    //             }, callbackScope: this, loop: true
-    //         });
-    //     }
-    //
-    // }
-
-    // updateScore() {
-    //     this.scoreText.setText(`Score: ${this.score}`);
-    // }
-
-    // gameOver() {
-    //     this.input.setDefaultCursor('default');
-    //     this.add.rectangle(0, 0, 800, 600, Phaser.Display.Color.HexStringToColor('#ffffff').color)
-    //         .setOrigin(0,0);
-    //     this.add.text(100, 100, "You suck!", {
-    //         fontFamily: "Arial Black",
-    //         fontSize: 100,
-    //         color: "#00ff00"
-    //     }).setStroke('#de77ae', 4);
-    // }
 
 
     level1Win() {
@@ -226,7 +192,6 @@ class Level2 extends Phaser.Scene {
         const background = this.add.image(400, 300, 'background')
             .setScale(0.8, 0.8)
             .setFlipX(true);
-        this.drawHeader("Level 2");
         this.level2_cupid = this.add.sprite(700, 150, 'cupid')
             .setScale(0.05)
             .setAngle(280)
@@ -317,7 +282,20 @@ class Level2 extends Phaser.Scene {
             });
     }
 
-    drawHeader(headerText) {
+
+
+}
+
+
+class Header extends Phaser.Scene {
+    constructor() {
+        super({
+            key: 'Header'
+        })
+    }
+
+    create() {
+        let headerText = "header"
         const graphics = this.add.graphics();
         graphics.fillStyle(0x440044, 1);
         graphics.fillRect(0, 0, 800, 50);
@@ -329,7 +307,40 @@ class Level2 extends Phaser.Scene {
         }).setStroke('#de77ae', 4);
     }
 
+    // startCountDownTimer() {
+    //     if (this.enableCountdown) {
+    //         this.time.addEvent({
+    //             delay: 1000, callback: () => {
+    //                 this.timeLeft -= 1; // One second
+    //                 this.timerText.setText("Time left: " + this.timeLeft);
+    //                 if (this.timeLeft === 0) {
+    //                     this.gameOver();
+    //                     this.time.removeAllEvents();
+    //                 }
+    //             }, callbackScope: this, loop: true
+    //         });
+    //     }
+    //
+    // }
+
+    // updateScore() {
+    //     this.scoreText.setText(`Score: ${this.score}`);
+    // }
+
+    // gameOver() {
+    //     this.input.setDefaultCursor('default');
+    //     this.add.rectangle(0, 0, 800, 600, Phaser.Display.Color.HexStringToColor('#ffffff').color)
+    //         .setOrigin(0,0);
+    //     this.add.text(100, 100, "You suck!", {
+    //         fontFamily: "Arial Black",
+    //         fontSize: 100,
+    //         color: "#00ff00"
+    //     }).setStroke('#de77ae', 4);
+    // }
+
+
 }
+
 
 
 const config = {
