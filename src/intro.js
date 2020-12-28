@@ -19,10 +19,11 @@ export default class Intro extends Phaser.Scene {
 
     runIntro() {
         this.add.image(400, 300, 'splash')
+            .setScale(0.78)
             .setInteractive({useHandCursor: true})
             .on("pointerup", () => {
                 this.scene.start('Header')
-                this.scene.launch('Level1');
+                this.scene.launch('Level2');
             });
     }
 

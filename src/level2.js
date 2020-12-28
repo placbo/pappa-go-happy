@@ -1,4 +1,4 @@
-import background from "./assets/background.jpg";
+import background from "./assets/background.png";
 import julieHead from "./assets/julie.png";
 import julieBody from "./assets/body.png";
 import star from "./assets/star.png";
@@ -35,18 +35,19 @@ export default class Level2 extends Phaser.Scene {
         Header.setLevelText("Level 2");
 
         this.add.image(0, 50, 'background')
-            .setScale(0.8, 0.8)
-            .setFlipX(true)
+            .setScale(0.78)
             .setOrigin(0);
         this.drawJulie();
         this.drawSadIver();
         this.drawCupid();
-        this.cloud = this.add.sprite(700, 150, 'cloud')
-            .setScale(0.5).setInteractive({useHandCursor: true});
+        this.cloud = this.add.sprite(0, 80, 'cloud')
+            .setScale(0.78)
+            .setOrigin(0)
+            .setInteractive({useHandCursor: true});
         this.arrow = this.physics.add.sprite(700, 150, 'julie')
             .setScale(0.2)
             .setAngle(this.arrowAngle)
-            .setGravityY(40)
+            .setGravityY(50)
             .setCollideWorldBounds(true)
             .disableBody(true, true);
         this.arrow.body.onWorldBounds = true;
@@ -63,8 +64,8 @@ export default class Level2 extends Phaser.Scene {
         this.cloud.on('pointerup', (pointer) => {
             this.tweens.add({
                 targets: this.cloud,
-                x: -100,
-                y: -100,
+                x: 300,
+                y: 300,
                 duration: 500,
                 onComplete: () => {
                     this.cloud.destroy();
@@ -73,8 +74,8 @@ export default class Level2 extends Phaser.Scene {
             this.cupid.on('pointerdown', (pointer) => {
                 if (!won && readyForNewArrow) {
                     readyForNewArrow = false;
-                    this.arrow.enableBody(true, 700, 150, true, true).setAngle(this.arrowAngle);
-                    this.physics.velocityFromAngle(this.arrowAngle + 180, 200, this.arrow.body.velocity);
+                    this.arrow.enableBody(true, 650, 150, true, true).setAngle(this.arrowAngle);
+                    this.physics.velocityFromAngle(this.arrowAngle + 160, 150, this.arrow.body.velocity);
                     this.physics.add.collider(this.arrow, this.julie, (noe) => {
                         console.log("HIT!", noe)
                         this.julie.destroy();
@@ -92,7 +93,7 @@ export default class Level2 extends Phaser.Scene {
     }
 
     drawJulie() {
-        this.julie = this.physics.add.sprite(100, 400, 'julie')
+        this.julie = this.physics.add.sprite(130, 500, 'julie')
             .setScale(0.1)
             .setFlipX(true);
         //add animation on julie
@@ -109,7 +110,7 @@ export default class Level2 extends Phaser.Scene {
     }
 
     drawSadIver() {
-        this.iver = this.add.image(100, 500, 'sadMan')
+        this.iver = this.add.image(70, 500, 'sadMan')
             .setScale(0.1);
 
     }
@@ -121,23 +122,23 @@ export default class Level2 extends Phaser.Scene {
     }
 
     drawCupid() {
-        this.cupid = this.add.sprite(700, 150, 'cupid')
-            .setScale(0.05)
-            .setAngle(280)
-            .setOrigin(0.2).setInteractive({useHandCursor: true});
+        this.cupid = this.add.sprite(650, 150, 'cupid')
+            .setOrigin(0.2)
+            .setAngle(20)
+            .setScale(0.78)
+            .setInteractive({useHandCursor: true});
 
         //Add animation on cupid
-        this.tweens.addCounter({
+        this.tweens.add({
             targets: this.cupid,
-            from: 280,
-            to: 350,
+            angle: -60,
             duration: 2000,
             yoyo: true,
             ease: 'Sine.easeInOut',
             repeat: -1,
             delay: Math.random() * 1000,
             onUpdate: (tween) => {
-                this.cupid.setAngle(tween.getValue());
+                //this.cupid.setAngle(tween.getValue());
                 this.arrowAngle = tween.getValue();
             }
         });

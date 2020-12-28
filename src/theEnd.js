@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import splash from "./assets/splash.png";
+import splash from "./assets/splash_old.png";
 
 export default class TheEnd extends Phaser.Scene {
 

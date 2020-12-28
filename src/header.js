@@ -16,11 +16,14 @@ export default class Header extends Phaser.Scene {
     }
 
     create() {
-        let headerText = "LEVEL 1"
         const graphics = this.add.graphics();
         graphics.fillStyle(0x333333, 1);
         graphics.fillRect(0, 0, 800, 50);
-        this.levelText = this.add.text(350, 10, "").setFontSize(24).setFontFamily('Arial').setColor('#fff900').setFontStyle('bold italic');
+        this.levelText = this.add.text(350, 10, "")
+            .setFontSize(24)
+            .setFontFamily('Arial')
+            .setColor('#fff900')
+            .setFontStyle('bold italic');
 
 
         // this.scoreText = this.add.text(10, 10, "", {

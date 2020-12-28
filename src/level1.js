@@ -1,4 +1,4 @@
-import background from "./assets/background.jpg";
+import background from "./assets/background.png";
 import julieHead from "./assets/julie.png";
 import julieBody from "./assets/body.png";
 import star from "./assets/star.png";
@@ -23,11 +23,11 @@ export default class Level1 extends Phaser.Scene {
     }
 
     create() {
-
         let Header = this.scene.get('Header');
         Header.setLevelText("Level 1");
-
-        this.add.image(0, 50, 'background').setScale(0.7, 0.7).setOrigin(0);
+        this.add.image(0, 50, 'background')
+            .setScale(0.78)
+            .setOrigin(0);
         this.gun = this.add.sprite(300, 510, "gun")
             .setScale(0.2)
             .setInteractive({useHandCursor: true})
