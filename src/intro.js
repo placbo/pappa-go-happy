@@ -18,7 +18,7 @@ export default class Intro extends Phaser.Scene {
     }
 
     runIntro() {
-        this.add.image(0, 0, 'splash')
+        this.add.image(0, 50, 'splash')
             .setOrigin(0)
             .setInteractive({useHandCursor: true})
             .on("pointerup", () => {

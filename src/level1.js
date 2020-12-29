@@ -52,10 +52,10 @@ export default class Level1 extends Phaser.Scene {
     drawTargetsAndStartShootingGame() {
         this.input.setDefaultCursor('cell');
         this.targets = this.add.group();
-        const numberOfTargets = 1;
+        const numberOfTargets = 3;
         let targetsLeft = numberOfTargets;
         for (let i = 0; i < numberOfTargets; i++) {
-            this.targets.create(120, 300 + (65 * i), 'target').setScale(0.1).setInteractive();
+            this.targets.create(120, 300 + (63 * i), 'target').setScale(0.1).setInteractive();
         }
 
         this.targets.children.iterate((child) => {
