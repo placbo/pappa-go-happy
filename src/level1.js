@@ -1,7 +1,6 @@
-import background from "./assets/background.png";
-import julieHead from "./assets/julie.png";
-import julieBody from "./assets/body.png";
-import star from "./assets/star.png";
+import background_level1 from "./assets/background_level1.jpg";
+import booth from "./assets/booth.png";
+import target from "./assets/target.png";
 import gun from "./assets/gun.png";
 import nextLevelArrow from "./assets/right-arrow.png";
 
@@ -14,10 +13,9 @@ export default class Level1 extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background', background);
-        this.load.image('julie', julieHead);
-        this.load.image('body', julieBody);
-        this.load.image('star', star);
+        this.load.image('background_level1', background_level1);
+        this.load.image('booth', booth);
+        this.load.image('target', target);
         this.load.image('gun', gun);
         this.load.image('nextLevelArrow', nextLevelArrow);
     }
@@ -25,58 +23,45 @@ export default class Level1 extends Phaser.Scene {
     create() {
         let Header = this.scene.get('Header');
         Header.setLevelText("Level 1");
-        this.add.image(0, 50, 'background')
-            .setScale(0.78)
+        this.add.image(0, 50, 'background_level1')
             .setOrigin(0);
-        this.gun = this.add.sprite(300, 510, "gun")
+        this.add.image(0, 50, 'booth')
+            .setOrigin(0)
+            .setDepth(1);
+        this.gun = this.add.sprite(300, 610, "gun")
             .setScale(0.2)
+            .setAngle(-30)
             .setInteractive({useHandCursor: true})
             .on("pointerup", () => {
-                this.drawStarsAndStartShootingGame();
+                this.drawTargetsAndStartShootingGame();
                 this.gun.destroy();
             })
-        this.drawJulie();
     }
 
     level1Win() {
         this.input.setDefaultCursor('default');
         //TODO: show happyPer
-        this.add.image(700, 550, 'nextLevelArrow')
+        this.add.image(750, 580, 'nextLevelArrow')
             .setScale(0.1)
             .setInteractive({useHandCursor: true})
             .on("pointerdown", () => {
-                this.scene.start('Level2')
+                this.scene.start('Level2');
             });
     }
 
-    drawJulie() {
-        this.add.image(650, 500, 'body').setScale(0.5);
-        const julieHead = this.add.image(650, 470, 'julie').setScale(0.3).setOrigin(0.5, 1);
-        this.tweens.addCounter({
-            from: 1,
-            to: 10,
-            duration: 1000,
-            yoyo: true,
-            repeat: -1,
-            onUpdate: (tween) => {
-                julieHead.setAngle(tween.getValue());
-            }
-        });
-    }
-
-    drawStarsAndStartShootingGame() {
+    drawTargetsAndStartShootingGame() {
         this.input.setDefaultCursor('cell');
-        this.stars = this.add.group();
-        const numberOfStars = 2;
-        let starsLeft = numberOfStars;
-        for (let i = 0; i < numberOfStars; i++) {
-            this.stars.create(100, 100 + (50 * i), 'star').setInteractive();
+        this.targets = this.add.group();
+        const numberOfTargets = 1;
+        let targetsLeft = numberOfTargets;
+        for (let i = 0; i < numberOfTargets; i++) {
+            this.targets.create(120, 300 + (65 * i), 'target').setScale(0.1).setInteractive();
         }
 
-        this.stars.children.iterate((child) => {
+        this.targets.children.iterate((child) => {
             this.tweens.add({
                 targets: child,
-                x: 600,
+                x: 660,
                 duration: 3000,
                 flipX: true,
                 yoyo: true,
@@ -87,8 +72,8 @@ export default class Level1 extends Phaser.Scene {
 
         this.input.on('gameobjectdown', (pointer, gameObject) => {
             gameObject.destroy();
-            starsLeft--;
-            if (starsLeft === 0) {
+            targetsLeft--;
+            if (targetsLeft === 0) {
                 this.level1Win();
             }
         }, this);

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import splash from "./assets/splash.png";
+import splash from "./assets/splash.jpg";
 
 export default class Intro extends Phaser.Scene {
 
@@ -18,12 +18,12 @@ export default class Intro extends Phaser.Scene {
     }
 
     runIntro() {
-        this.add.image(400, 300, 'splash')
-            .setScale(0.78)
+        this.add.image(0, 0, 'splash')
+            .setOrigin(0)
             .setInteractive({useHandCursor: true})
             .on("pointerup", () => {
                 this.scene.start('Header')
-                this.scene.launch('Level2');
+                this.scene.launch('Level1');
             });
     }
 

@@ -1,11 +1,10 @@
-import background from "./assets/background.png";
+import background_level2 from "./assets/background_level2.jpg";
 import julieHead from "./assets/julie.png";
-import julieBody from "./assets/body.png";
-import star from "./assets/star.png";
+//import arrow from "./assets/arrow.png";
 import nextLevelArrow from "./assets/right-arrow.png";
 import cupid from "./assets/cupid.png";
 import cloud from "./assets/cloud.png";
-import sadMan from "./assets/sad_man.png";
+import iverBored from "./assets/iverbored.png";
 import happyCouple from "./assets/happy_couple.png";
 
 export default class Level2 extends Phaser.Scene {
@@ -18,14 +17,12 @@ export default class Level2 extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background', background);
+        this.load.image('background_level2', background_level2);
         this.load.image('julie', julieHead);
-        this.load.image('body', julieBody);
-        this.load.image('star', star);
         this.load.image('nextLevelArrow', nextLevelArrow);
         this.load.image('cupid', cupid);
         this.load.image('cloud', cloud);
-        this.load.image('sadMan', sadMan);
+        this.load.image('iverBored', iverBored);
         this.load.image('happyCouple', happyCouple);
     }
 
@@ -34,14 +31,12 @@ export default class Level2 extends Phaser.Scene {
         let Header = this.scene.get('Header');
         Header.setLevelText("Level 2");
 
-        this.add.image(0, 50, 'background')
-            .setScale(0.78)
+        this.add.image(0, 50, 'background_level2')
             .setOrigin(0);
         this.drawJulie();
-        this.drawSadIver();
+        this.drawIverBored();
         this.drawCupid();
-        this.cloud = this.add.sprite(0, 80, 'cloud')
-            .setScale(0.78)
+        this.cloud = this.add.sprite(570, 80, 'cloud')
             .setOrigin(0)
             .setInteractive({useHandCursor: true});
         this.arrow = this.physics.add.sprite(700, 150, 'julie')
@@ -64,8 +59,8 @@ export default class Level2 extends Phaser.Scene {
         this.cloud.on('pointerup', (pointer) => {
             this.tweens.add({
                 targets: this.cloud,
-                x: 300,
-                y: 300,
+                x: 1000,
+                y: -100,
                 duration: 500,
                 onComplete: () => {
                     this.cloud.destroy();
@@ -77,11 +72,10 @@ export default class Level2 extends Phaser.Scene {
                     this.arrow.enableBody(true, 650, 150, true, true).setAngle(this.arrowAngle);
                     this.physics.velocityFromAngle(this.arrowAngle + 160, 150, this.arrow.body.velocity);
                     this.physics.add.collider(this.arrow, this.julie, (noe) => {
-                        console.log("HIT!", noe)
                         this.julie.destroy();
                         this.arrow.destroy();
                         this.cupid.destroy();
-                        this.iver.destroy();
+                        this.iverBored.destroy();
                         this.drawHappyCouple();
                         //this.arrow.disableBody(true,true);
                         this.level2Win();
@@ -109,10 +103,8 @@ export default class Level2 extends Phaser.Scene {
         });
     }
 
-    drawSadIver() {
-        this.iver = this.add.image(70, 500, 'sadMan')
-            .setScale(0.1);
-
+    drawIverBored() {
+        this.iverBored = this.add.image(100, 550, 'iverBored')
     }
 
     drawHappyCouple() {
@@ -125,7 +117,7 @@ export default class Level2 extends Phaser.Scene {
         this.cupid = this.add.sprite(650, 150, 'cupid')
             .setOrigin(0.2)
             .setAngle(20)
-            .setScale(0.78)
+            .setScale(0.05)
             .setInteractive({useHandCursor: true});
 
         //Add animation on cupid
