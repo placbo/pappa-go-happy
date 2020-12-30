@@ -2,6 +2,7 @@ import Intro from './intro';
 import Header from './header';
 import Level1 from './level1';
 import Level2 from './level2';
+import Level3 from './level3';
 import TheEnd from './theEnd';
 
 
@@ -21,7 +22,7 @@ const config = {
 
         }
     },
-    scene: [Intro, Header, Level1, Level2, TheEnd]
+    scene: [Level3, Intro, Header, Level1, Level2, TheEnd]
 };
 
 const game = new Phaser.Game(config);
