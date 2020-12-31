@@ -1,11 +1,13 @@
 import background_level2 from "./assets/background_level2.jpg";
 import julieHead from "./assets/julie.png";
-//import arrow from "./assets/arrow.png";
+import arrow from "./assets/arrow.png";
 import nextLevelArrow from "./assets/right-arrow.png";
 import cupid from "./assets/cupid.png";
 import cloud from "./assets/cloud.png";
 import iverBored from "./assets/iverbored.png";
 import happyCouple from "./assets/happy_couple.png";
+import Phaser from "phaser";
+
 
 export default class Level2 extends Phaser.Scene {
 
@@ -19,6 +21,7 @@ export default class Level2 extends Phaser.Scene {
     preload() {
         this.load.image('background_level2', background_level2);
         this.load.image('julie', julieHead);
+        this.load.image('arrow', arrow);
         this.load.image('nextLevelArrow', nextLevelArrow);
         this.load.image('cupid', cupid);
         this.load.image('cloud', cloud);
@@ -39,8 +42,8 @@ export default class Level2 extends Phaser.Scene {
         this.cloud = this.add.sprite(570, 80, 'cloud')
             .setOrigin(0)
             .setInteractive({useHandCursor: true});
-        this.arrow = this.physics.add.sprite(700, 150, 'julie')
-            .setScale(0.2)
+        this.arrow = this.physics.add.sprite(700, 150, 'arrow')
+            .setScale(0.15)
             .setAngle(this.arrowAngle)
             .setGravityY(50)
             .setCollideWorldBounds(true)
@@ -69,7 +72,9 @@ export default class Level2 extends Phaser.Scene {
             this.cupid.on('pointerdown', (pointer) => {
                 if (!won && readyForNewArrow) {
                     readyForNewArrow = false;
-                    this.arrow.enableBody(true, 650, 150, true, true).setAngle(this.arrowAngle);
+                    this.arrow.enableBody(true, 650, 150, true, true)
+                        .setAngle(this.arrowAngle)
+                        .setAngularAcceleration(-10);
                     this.physics.velocityFromAngle(this.arrowAngle + 160, 150, this.arrow.body.velocity);
                     this.physics.add.collider(this.arrow, this.julie, (noe) => {
                         this.julie.destroy();
@@ -142,7 +147,7 @@ export default class Level2 extends Phaser.Scene {
             .setScale(0.1)
             .setInteractive({useHandCursor: true})
             .on("pointerdown", () => {
-                this.scene.start('TheEnd')
+                this.scene.start('Level3')
             });
     }
 

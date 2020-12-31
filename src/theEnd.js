@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import splash from "./assets/splash_old.png";
+import splash from "./assets/splash.jpg";
 
 export default class TheEnd extends Phaser.Scene {
 
@@ -14,7 +14,10 @@ export default class TheEnd extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(400, 300, 'splash')
+        let Header = this.scene.get('Header');
+        Header.setLevelText("THE END");
+        this.add.image(0, 50, 'splash')
+            .setOrigin(0)
     }
 
 }
