@@ -1,6 +1,6 @@
 import nextLevelArrow from "./assets/right-arrow.png";
 import background_level3 from "./assets/background_level3.jpg";
-import julieHead from "./assets/julie.png";
+import julie from "./assets/julie-body_100.png";
 import palmTree from "./assets/tree.png";
 import axe from "./assets/axe.png";
 import stone from "./assets/stone_100.png";
@@ -22,7 +22,7 @@ export default class Level3 extends Phaser.Scene {
     preload() {
         this.load.image('background_level3', background_level3);
         this.load.image('nextLevelArrow', nextLevelArrow);
-        this.load.image('julie', julieHead);
+        this.load.image('julie', julie);
         this.load.image('axe', axe);
         this.load.image('stone', stone);
         this.load.image('stoneSmall', stoneSmall);
@@ -54,7 +54,6 @@ export default class Level3 extends Phaser.Scene {
         this.axe = this.add.sprite(750, 330, 'axe')
             .setInteractive({useHandCursor: true});
         this.character = this.physics.add.sprite(this.startCoordinates.x, this.startCoordinates.y, 'julie')
-            .setScale(0.2)
             .setGravityY(250)
             .setCollideWorldBounds(true);
         this.tree = this.physics.add.sprite(490, 245, 'palmTree')

@@ -1,5 +1,5 @@
 import background_level2 from "./assets/background_level2.jpg";
-import julieHead from "./assets/julie.png";
+import julie from "./assets/julie-body_100.png";
 import arrow from "./assets/arrow.png";
 import nextLevelArrow from "./assets/right-arrow.png";
 import cupid from "./assets/cupid.png";
@@ -20,7 +20,7 @@ export default class Level2 extends Phaser.Scene {
 
     preload() {
         this.load.image('background_level2', background_level2);
-        this.load.image('julie', julieHead);
+        this.load.image('julie', julie);
         this.load.image('arrow', arrow);
         this.load.image('nextLevelArrow', nextLevelArrow);
         this.load.image('cupid', cupid);
@@ -93,7 +93,6 @@ export default class Level2 extends Phaser.Scene {
 
     drawJulie() {
         this.julie = this.physics.add.sprite(130, 500, 'julie')
-            .setScale(0.1)
             .setFlipX(true);
         //add animation on julie
         this.julie.scene.tweens.add({

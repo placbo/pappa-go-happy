@@ -23,7 +23,7 @@ export default class Intro extends Phaser.Scene {
             .setInteractive({useHandCursor: true})
             .on("pointerup", () => {
                 this.scene.start('Header')
-                this.scene.launch('Level1');
+                this.scene.launch('Level2');
             });
     }
 
