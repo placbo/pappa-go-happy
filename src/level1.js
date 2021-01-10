@@ -55,7 +55,7 @@ export default class Level1 extends Phaser.Scene {
         const numberOfTargets = 3;
         let targetsLeft = numberOfTargets;
         for (let i = 0; i < numberOfTargets; i++) {
-            this.targets.create(120, 300 + (63 * i), 'target').setScale(0.1).setInteractive();
+            this.targets.create(120, 300 + (63 * i), 'target').setInteractive();
         }
 
         this.targets.children.iterate((child) => {

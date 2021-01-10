@@ -1,6 +1,5 @@
 import nextLevelArrow from "./assets/right-arrow.png";
 import background_level3 from "./assets/background_level3.jpg";
-import julie from "./assets/julie-body_100.png";
 import palmTree from "./assets/tree.png";
 import axe from "./assets/axe.png";
 import stone from "./assets/stone_100.png";
@@ -23,7 +22,6 @@ export default class Level3 extends Phaser.Scene {
     preload() {
         this.load.image('background_level3', background_level3);
         this.load.image('nextLevelArrow', nextLevelArrow);
-        // this.load.image('julie', julie);
         this.load.image('axe', axe);
         this.load.image('stone', stone);
         this.load.image('stoneSmall', stoneSmall);
@@ -31,7 +29,7 @@ export default class Level3 extends Phaser.Scene {
         this.load.image('nextLevelArrow', nextLevelArrow);
         this.load.image('balloon', balloon);
         this.load.image('keyHint', keyHint);
-        this.load.spritesheet('julie', walk_sprites, {frameWidth: 100, frameHeight: 100});
+        this.load.spritesheet('julieSheet', walk_sprites, {frameWidth: 100, frameHeight: 100});
     }
 
     create() {
@@ -56,7 +54,7 @@ export default class Level3 extends Phaser.Scene {
         this.balloon = this.add.image(120, 320, 'balloon');
         this.axe = this.add.sprite(750, 330, 'axe')
             .setInteractive({useHandCursor: true});
-        this.character = this.physics.add.sprite(this.startCoordinates.x, this.startCoordinates.y, 'julie2')
+        this.character = this.physics.add.sprite(this.startCoordinates.x, this.startCoordinates.y, 'julieSheet')
             .setGravityY(350)
             .setBounce(0.2)
             .setSize(50, 100)
@@ -66,14 +64,14 @@ export default class Level3 extends Phaser.Scene {
             .setCollideWorldBounds(true);
         this.stone = this.add.sprite(770, 330, 'stone')
             .setInteractive({useHandCursor: true})
-            .on('pointerup', (pointer) => {
-                this.axe.on('pointerup', (pointer) => {
+            .on('pointerup', () => {
+                this.axe.on('pointerup', () => {
                     this.input.on('pointermove', function (pointer) {
                         this.axe.setDepth(1).setPosition(pointer.x, pointer.y).disableInteractive();
                     }, this);
                     this.tree
                         .setInteractive({useHandCursor: true})
-                        .on('pointerup', (pointer) => {
+                        .on('pointerup', () => {
                             this.tree.setGravityY(400).setGravityX(-200).setAngularAcceleration(-200);
                             this.axe.destroy();
                         })
@@ -91,27 +89,27 @@ export default class Level3 extends Phaser.Scene {
 
         this.anims.create({
             key: 'left',
-            frames: this.anims.generateFrameNumbers('julie', {frames: [0, 1, 2, 1]}),
+            frames: this.anims.generateFrameNumbers('julieSheet', {frames: [0, 1, 2, 1]}),
             frameRate: 8,
             repeat: -1
         });
 
         this.anims.create({
             key: 'turn',
-            frames: [{key: 'julie', frame: 8}],
+            frames: [{key: 'julieSheet', frame: 8}],
             frameRate: 20
         });
 
 
         this.anims.create({
             key: 'jump',
-            frames: [{key: 'julie', frame: 6}],
+            frames: [{key: 'julieSheet', frame: 6}],
             frameRate: 20
         });
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('julie', {frames: [3, 4, 5, 4]}),
+            frames: this.anims.generateFrameNumbers('julieSheet', {frames: [3, 4, 5, 4]}),
             frameRate: 8,
             repeat: -1
         });
@@ -173,7 +171,7 @@ export default class Level3 extends Phaser.Scene {
     level3Win() {
         //TODO: show happyPer
         this.character.disableBody().visible = false;
-        this.add.image(70, 320, 'julie', 7);
+        this.add.image(70, 320, 'julieSheet', 7);
         this.balloon.setPosition(115, 290);
         this.add.image(700, 550, 'nextLevelArrow')
             .setScale(0.1)
