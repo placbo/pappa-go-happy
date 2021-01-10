@@ -1,9 +1,10 @@
 import nextLevelArrow from "./assets/right-arrow.png";
+import background_level3 from "./assets/background_level3.jpg";
 import julieHead from "./assets/julie.png";
-import cliff from "./assets/cliff.png";
-import palmTree from "./assets/palmtree.png";
+import palmTree from "./assets/tree.png";
 import axe from "./assets/axe.png";
-import stone from "./assets/stone.png";
+import stone from "./assets/stone_100.png";
+import stoneSmall from "./assets/stone20.png";
 import balloon from "./assets/balloon.png";
 import keyHint from "./assets/keyspng.png";
 
@@ -19,49 +20,46 @@ export default class Level3 extends Phaser.Scene {
     }
 
     preload() {
+        this.load.image('background_level3', background_level3);
         this.load.image('nextLevelArrow', nextLevelArrow);
         this.load.image('julie', julieHead);
-        this.load.image('cliff', cliff);
         this.load.image('axe', axe);
         this.load.image('stone', stone);
+        this.load.image('stoneSmall', stoneSmall);
         this.load.image('palmTree', palmTree);
         this.load.image('nextLevelArrow', nextLevelArrow);
         this.load.image('balloon', balloon);
         this.load.image('keyHint', keyHint);
-
     }
 
     create() {
-
         //todo show keyboard-hints
-        let Header = this.scene.get('Header');
-        Header.setLevelText("Level 3");
-        const graphics = this.add.graphics();
-        graphics.fillGradientStyle(0x00ffff, 0x00ff00, 0x0000ff, 0xffff00, 1);
-        graphics.fillRect(0, 50, 800, 650);
+        this.header = this.scene.get('Header');
+        this.header.setLevelText("Level 3");
+        this.header.setHintText("Hint: Use arrow keys to move character");
 
         this.physics.world.setBoundsCollision(false, false, true, true);
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        const platforms = this.physics.add.staticGroup();
-        platforms.create(500, 350, 'cliff').setOrigin(0).refreshBody();
-        platforms.create(-60, 350, 'cliff').setOrigin(0).setFlipX(true).refreshBody();
+        this.add.image(0, 50, 'background_level3')
+            .setOrigin(0);
 
-        this.balloon = this.add.image(120, 330, 'balloon');
+        const platforms = this.physics.add.staticGroup();
+        platforms.create(500, 370,).setOrigin(0).setScale(10, 0).setVisible(false).refreshBody();
+        platforms.create(0, 370,).setOrigin(0).setScale(9, 0).setVisible(false).refreshBody();
+
+
+        this.add.image(120, 360, 'stoneSmall');
+        this.balloon = this.add.image(120, 320, 'balloon');
         this.axe = this.add.sprite(750, 330, 'axe')
             .setInteractive({useHandCursor: true});
-        this.keyhint = this.add.image(700, 80, 'keyHint')
-            .setOrigin(0)
-            .setScale(0.3);
         this.character = this.physics.add.sprite(this.startCoordinates.x, this.startCoordinates.y, 'julie')
             .setScale(0.2)
             .setGravityY(250)
             .setCollideWorldBounds(true);
-        this.tree = this.physics.add.sprite(490, 235, 'palmTree')
-            .setScale(0.9)
+        this.tree = this.physics.add.sprite(490, 245, 'palmTree')
             .setCollideWorldBounds(true);
-        this.stone = this.add.sprite(750, 330, 'stone')
-            .setScale(0.5)
+        this.stone = this.add.sprite(770, 330, 'stone')
             .setInteractive({useHandCursor: true})
             .on('pointerup', (pointer) => {
                 this.axe.on('pointerup', (pointer) => {
@@ -119,10 +117,10 @@ export default class Level3 extends Phaser.Scene {
         if (this.cursors) {
             if (this.cursors.left.isDown) {
                 this.character.setVelocityX(-160);
-                this.keyhint.destroy();
+                this.header.setHintText("");
             } else if (this.cursors.right.isDown) {
                 this.character.setVelocityX(160);
-                this.keyhint.destroy();
+                this.header.setHintText("");
             } else {
                 this.character.setVelocityX(0);
             }

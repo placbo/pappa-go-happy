@@ -24,7 +24,10 @@ export default class Header extends Phaser.Scene {
             .setFontFamily('Arial')
             .setColor('#fff900')
             .setFontStyle('bold italic');
-
+        this.hintText = this.add.text(500, 15, "")
+            .setFontSize(16)
+            .setFontFamily('Arial')
+            .setColor('#aa4444');
 
         // this.scoreText = this.add.text(10, 10, "", {
         //     fontFamily: "Arial Black",
@@ -42,8 +45,11 @@ export default class Header extends Phaser.Scene {
 
     }
 
-    setLevelText(per) {
-        this.levelText.setText(per);
+    setLevelText(txt) {
+        this.levelText.setText(txt);
+    }
+   setHintText(txt) {
+        this.hintText.setText(txt);
     }
 
 
