@@ -1,11 +1,12 @@
 import background_level2 from "./assets/background_level2.jpg";
 import julie from "./assets/julie-body_100.png";
 import arrow from "./assets/arrow.png";
-import nextLevelArrow from "./assets/right-arrow.png";
+import nextLevelArrowSheet from "./assets/next_level_arrows.png";
 import cupid from "./assets/cupid.png";
 import cloud from "./assets/cloud.png";
 import iverBored from "./assets/iverbored.png";
-import happyCouple from "./assets/happy_couple.png";
+import happyCouple from "./assets/JulieIver.png";
+import heart_sprites from "./assets/heart-sprite.png";
 import Phaser from "phaser";
 
 
@@ -22,11 +23,13 @@ export default class Level2 extends Phaser.Scene {
         this.load.image('background_level2', background_level2);
         this.load.image('julie', julie);
         this.load.image('arrow', arrow);
-        this.load.image('nextLevelArrow', nextLevelArrow);
+        //this.load.image('nextLevelArrow', nextLevelArrow);
         this.load.image('cupid', cupid);
         this.load.image('cloud', cloud);
         this.load.image('iverBored', iverBored);
         this.load.image('happyCouple', happyCouple);
+        this.load.spritesheet('heartSheet', heart_sprites, {frameWidth: 100, frameHeight: 100});
+        this.load.spritesheet('nextLevelArrows', nextLevelArrowSheet, {frameWidth: 100, frameHeight: 75});
     }
 
     create() {
@@ -75,14 +78,13 @@ export default class Level2 extends Phaser.Scene {
                     this.arrow.enableBody(true, 650, 150, true, true)
                         .setAngle(this.arrowAngle)
                         .setAngularAcceleration(-10);
-                    this.physics.velocityFromAngle(this.arrowAngle + 160, 150, this.arrow.body.velocity);
+                    this.physics.velocityFromAngle(this.arrowAngle + 160, 1050, this.arrow.body.velocity);
                     this.physics.add.collider(this.arrow, this.julie, (noe) => {
                         this.julie.destroy();
                         this.arrow.destroy();
                         this.cupid.destroy();
                         this.iverBored.destroy();
                         this.drawHappyCouple();
-                        //this.arrow.disableBody(true,true);
                         this.level2Win();
                         won = true;
                     }, null, this);
@@ -112,8 +114,19 @@ export default class Level2 extends Phaser.Scene {
     }
 
     drawHappyCouple() {
-        this.add.image(100, 500, 'happyCouple')
-            .setScale(0.1);
+
+
+        this.anims.create({
+            key: 'heart_pump',
+            frames: this.anims.generateFrameNumbers('heartSheet', {frames: [0, 1, 2, 1]}),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.add.image(200, 500, 'happyCouple');
+
+        const cody = this.add.sprite(200, 500,heart_sprites);
+        cody.play('heart_pump');
+
 
     }
 
@@ -142,8 +155,7 @@ export default class Level2 extends Phaser.Scene {
 
     level2Win() {
         //TODO: show happyPer
-        this.add.image(700, 550, 'nextLevelArrow')
-            .setScale(0.1)
+        this.add.image(700, 600, 'nextLevelArrows', 1)
             .setInteractive({useHandCursor: true})
             .on("pointerdown", () => {
                 this.scene.start('Level3')
