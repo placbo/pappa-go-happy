@@ -7,6 +7,7 @@ import stoneSmall from "./assets/stone20.png";
 import balloon from "./assets/balloon.png";
 import keyHint from "./assets/keyspng.png";
 import walk_sprites from "./assets/julie_spritecheet.png";
+import nextLevelArrowSheet from "./assets/next_level_arrows.png";
 
 export default class Level3 extends Phaser.Scene {
 
@@ -30,6 +31,7 @@ export default class Level3 extends Phaser.Scene {
         this.load.image('balloon', balloon);
         this.load.image('keyHint', keyHint);
         this.load.spritesheet('julieSheet', walk_sprites, {frameWidth: 100, frameHeight: 100});
+        this.load.spritesheet('nextLevelArrows', nextLevelArrowSheet, {frameWidth: 100, frameHeight: 75});
     }
 
     create() {
@@ -173,8 +175,15 @@ export default class Level3 extends Phaser.Scene {
         this.character.disableBody().visible = false;
         this.add.image(70, 320, 'julieSheet', 7);
         this.balloon.setPosition(115, 290);
-        this.add.image(700, 550, 'nextLevelArrow')
-            .setScale(0.1)
+
+        this.anims.create({
+            key: 'blinking_arrows',
+            frames: this.anims.generateFrameNumbers('nextLevelArrows', {frames: [0, 1, 2]}),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.add.sprite(700, 600, null)
+            .play('blinking_arrows')
             .setInteractive({useHandCursor: true})
             .on("pointerdown", () => {
                 this.scene.start('TheEnd')
