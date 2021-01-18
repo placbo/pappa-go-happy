@@ -8,14 +8,14 @@ import keyHint from "./assets/keyspng.png";
 import walk_sprites from "./assets/julie_spritecheet.png";
 import nextLevelArrowSheet from "./assets/next_level_arrows.png";
 
-export default class Level3 extends Phaser.Scene {
+export default class Level4 extends Phaser.Scene {
 
     constructor() {
         super({
-            key: 'Level3'
+            key: 'Level4'
         })
         this.cursors = null;
-        this.startCoordinates = {x: 600, y: 290};
+        this.startCoordinates = {x: 50, y: 70};
     }
 
     preload() {
@@ -32,57 +32,36 @@ export default class Level3 extends Phaser.Scene {
 
     create() {
         this.header = this.scene.get('Header');
-        this.header.setLevelText("Level 3");
+        this.header.setLevelText("Level 4");
         this.header.setHintText("Hint: Use arrow keys to move character");
 
-        this.physics.world.setBoundsCollision(false, false, true, true);
+        this.physics.world.setBoundsCollision(true, true, true, true);
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.add.image(0, 50, 'background_level3')
-            .setOrigin(0);
-
+            .setOrigin(0).setScale(10);
 
         const platforms = this.physics.add.staticGroup();
-        platforms.create(500, 370,).setOrigin(0).setScale(10, 0).setVisible(false).refreshBody();
-        platforms.create(0, 370,).setOrigin(0).setScale(6, 0).setVisible(false).refreshBody();
+        platforms.create(0, 50,).setOrigin(0).setScale(40, 0).setVisible(false).refreshBody();
+        platforms.create(0, 250,).setOrigin(0).setScale(20, 0).setVisible(true).refreshBody();
+        platforms.create(150, 450,).setOrigin(0).setScale(20, 0).setVisible(false).refreshBody();
+        platforms.create(0, 640,).setOrigin(0).setScale(40, 0).setVisible(false).refreshBody();
+
+        this.ladderGroup = this.physics.add.group();
+        this.ladderGroup.add(this.physics.add.image(370, 190, 'stone'));
 
 
-        this.add.image(120, 360, 'stoneSmall');
-        this.balloon = this.add.image(120, 320, 'balloon');
-        this.axe = this.add.sprite(750, 330, 'axe')
-            .setInteractive({useHandCursor: true});
+
+        //this.stone = this.add.sprite(370, 190, 'stone')
         this.character = this.physics.add.sprite(this.startCoordinates.x, this.startCoordinates.y, 'julieSheet')
-            .setGravityY(350)
+            .setGravityY(450)
             .setBounce(0.2)
             .setSize(50, 100)
             .setOffset(25, 0)
             .setCollideWorldBounds(true);
-        this.tree = this.physics.add.sprite(490, 245, 'palmTree')
-            .setCollideWorldBounds(true);
-        this.stone = this.add.sprite(770, 330, 'stone')
-            .setInteractive({useHandCursor: true})
-            .on('pointerup', () => {
-                this.axe.on('pointerup', () => {
-                    this.input.on('pointermove', function (pointer) {
-                        this.axe.setDepth(1).setPosition(pointer.x, pointer.y).disableInteractive();
-                    }, this);
-                    this.tree
-                        .setInteractive({useHandCursor: true})
-                        .on('pointerup', () => {
-                            this.tree.setGravityY(400).setGravityX(-200).setAngularAcceleration(-200);
-                            this.axe.destroy();
-                        })
-                })
-                this.tweens.add({
-                    targets: this.stone,
-                    x: 1000,
-                    y: -100,
-                    duration: 500,
-                    onComplete: () => {
-                        this.stone.destroy();
-                    }
-                });
-            })
+
+        this.physics.add.overlap(this.character, this.ladderGroup);
+
 
         this.anims.create({
             key: 'left',
@@ -112,31 +91,17 @@ export default class Level3 extends Phaser.Scene {
         });
 
 
-        this.tree.body.onWorldBounds = true;
         this.character.body.onWorldBounds = true;
-        this.physics.add.existing(this.stone, true);
-        this.physics.add.existing(this.balloon, true);
+
         this.physics.add.collider(this.character, platforms);
-        this.physics.add.collider(this.character, this.stone);
+        //  this.physics.add.existing(this.stone, true);
+        // this.physics.add.collider(this.character, this.stone);
+
+
         this.physics.add.overlap(this.character, this.balloon, () => {
             this.level3Win();
         }, null, this);
 
-        //handle objects falling into the abyss
-        this.physics.world.on("worldbounds", (body) => {
-            if (body.gameObject === this.character) {
-                this.character.setPosition(this.startCoordinates.x, this.startCoordinates.y).setVelocity(0);
-            }
-            if (body.gameObject === this.tree) {
-                this.tree.disableBody(true);
-                this.tree.scene.tweens.add({
-                    targets: this.tree,
-                    alpha: 0,
-                    duration: 1000,
-                    ease: 'Power2'
-                });
-            }
-        });
     }
 
     update() {
@@ -158,7 +123,7 @@ export default class Level3 extends Phaser.Scene {
 
 
             if (Phaser.Input.Keyboard.JustDown(this.cursors.up) && this.character.body.touching.down) {
-                this.character.setVelocityY(-150);
+                this.character.setVelocityY(-250);
                 this.character.anims.play('jump');
             }
         }
@@ -181,7 +146,7 @@ export default class Level3 extends Phaser.Scene {
             .play('blinking_arrows')
             .setInteractive({useHandCursor: true})
             .on("pointerdown", () => {
-                this.scene.start('TheEnd')
+                this.scene.start('Level5')
             });
     }
 

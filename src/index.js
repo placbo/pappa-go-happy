@@ -3,6 +3,8 @@ import Header from './header';
 import Level1 from './level1';
 import Level2 from './level2';
 import Level3 from './level3';
+import Level4 from './level4';
+import Level5 from './level5';
 import TheEnd from './theEnd';
 
 
@@ -18,16 +20,16 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: {y: 0},
-            // debug: true,
-            // debugShowBody: true,
-            // debugShowStaticBody: true,
-            // debugShowVelocity: true,
-            // debugVelocityColor: 0xffff00,
-            // debugBodyColor: 0x0000ff,
-            // debugStaticBodyColor: 0xffffff
+            debug: true,
+            debugShowBody: true,
+            debugShowStaticBody: true,
+            debugShowVelocity: true,
+            debugVelocityColor: 0xffff00,
+            debugBodyColor: 0x0000ff,
+            debugStaticBodyColor: 0xffffff
         }
     },
-    scene: [ Intro, Header, Level1, Level2, Level3,TheEnd]
+    scene: [Intro, Header, Level1, Level2, Level3, Level4, Level5, TheEnd]
 };
 
 const game = new Phaser.Game(config);
