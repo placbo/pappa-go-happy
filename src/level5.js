@@ -108,12 +108,20 @@ export default class Level5 extends Phaser.Scene {
 
         this.add.image(160, 250, 'picture3').setOrigin(0)
         this.add.image(475, 250, 'picture2').setOrigin(0)
-        this.wall_image = this.add.image(315, 225, 'picture1').setOrigin(0)
+        this.safe_closed = this.add.image(320, 230, 'safe_closed').setOrigin(0)
+        this.drawKeyPads();
+        this.wall_image = this.add.image(317, 227, 'picture1').setOrigin(0)
             .setInteractive({useHandCursor: true})
             .on('pointerup', () => {
-                this.wall_image.destroy();
-                this.safe_closed = this.add.image(320, 230, 'safe_closed').setOrigin(0)
-                this.drawKeyPads();
+                this.tweens.add({
+                    targets: this.wall_image,
+                    x: 1000,
+                    y: -100,
+                    duration: 500,
+                    onComplete: () => {
+                        this.wall_image.destroy();
+                    }
+                });
             });
 
     }
@@ -133,7 +141,7 @@ export default class Level5 extends Phaser.Scene {
 
     level5Win() {
         //TODO: show happyPer
-        // this.balloon.setPosition(115, 290);
+         this.balloon.setPosition(500, 450);
         this.anims.create({
             key: 'blinking_arrows',
             frames: this.anims.generateFrameNumbers('nextLevelArrows', {frames: [0, 1, 2]}),
