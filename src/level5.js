@@ -10,6 +10,8 @@ import picture1 from "./assets/picture1.png";
 import picture2 from "./assets/picture2.png";
 import picture3 from "./assets/picture3.png";
 import nextLevelArrowSheet from "./assets/next_level_arrows.png";
+import sadJulie from "./assets/sad_julie.png"
+import walk_sprites from "./assets/julie_spritecheet.png";
 
 export default class Level5 extends Phaser.Scene {
 
@@ -36,7 +38,10 @@ export default class Level5 extends Phaser.Scene {
         this.load.image('picture1', picture1);
         this.load.image('picture2', picture2);
         this.load.image('picture3', picture3);
+        this.load.image('sadJulie', sadJulie);
         this.load.spritesheet('nextLevelArrows', nextLevelArrowSheet, {frameWidth: 100, frameHeight: 75});
+        this.load.spritesheet('julieSheet', walk_sprites, {frameWidth: 100, frameHeight: 100});
+        this.load.image('balloon', balloon);
 
     }
 
@@ -106,6 +111,10 @@ export default class Level5 extends Phaser.Scene {
                 this.add.image(647, 200, 'poster1_teared').setOrigin(0);
             });
 
+
+        this.sadJulie = this.add.image(500, 430, 'sadJulie').setOrigin(0);
+
+
         this.add.image(160, 250, 'picture3').setOrigin(0)
         this.add.image(475, 250, 'picture2').setOrigin(0)
         this.safe_closed = this.add.image(320, 230, 'safe_closed').setOrigin(0)
@@ -140,8 +149,9 @@ export default class Level5 extends Phaser.Scene {
 
 
     level5Win() {
-        //TODO: show happyPer
-         this.balloon.setPosition(500, 450);
+        this.sadJulie.destroy();
+        this.add.image(465, 430, 'julieSheet', 7).setScale(1.95).setOrigin(0);
+        this.balloon.setPosition(635, 440);
         this.anims.create({
             key: 'blinking_arrows',
             frames: this.anims.generateFrameNumbers('nextLevelArrows', {frames: [0, 1, 2]}),

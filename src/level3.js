@@ -4,9 +4,10 @@ import axe from "./assets/axe.png";
 import stone from "./assets/stone_100.png";
 import stoneSmall from "./assets/stone20.png";
 import balloon from "./assets/balloon.png";
-import keyHint from "./assets/keyspng.png";
 import walk_sprites from "./assets/julie_spritecheet.png";
 import nextLevelArrowSheet from "./assets/next_level_arrows.png";
+import per_sad from "./assets/per-sad.png";
+import per_happy from "./assets/per-happy.png";
 
 export default class Level3 extends Phaser.Scene {
 
@@ -25,7 +26,8 @@ export default class Level3 extends Phaser.Scene {
         this.load.image('stoneSmall', stoneSmall);
         this.load.image('palmTree', palmTree);
         this.load.image('balloon', balloon);
-        this.load.image('keyHint', keyHint);
+        this.load.image('per_sad', per_sad);
+        this.load.image('per_happy', per_happy);
         this.load.spritesheet('julieSheet', walk_sprites, {frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('nextLevelArrows', nextLevelArrowSheet, {frameWidth: 100, frameHeight: 75});
     }
@@ -46,6 +48,9 @@ export default class Level3 extends Phaser.Scene {
         platforms.create(500, 370,).setOrigin(0).setScale(10, 0).setVisible(false).refreshBody();
         platforms.create(0, 370,).setOrigin(0).setScale(6, 0).setVisible(false).refreshBody();
 
+        this.sad_per = this.add.image(600, 420, 'per_sad')
+            .setOrigin(0)
+            .setDepth(2);
 
         this.add.image(120, 360, 'stoneSmall');
         this.balloon = this.add.image(120, 320, 'balloon');
@@ -166,11 +171,13 @@ export default class Level3 extends Phaser.Scene {
     }
 
     level3Win() {
-        //TODO: show happyPer
         this.character.disableBody().visible = false;
         this.add.image(70, 320, 'julieSheet', 7);
         this.balloon.setPosition(115, 290);
-
+        this.sad_per.destroy();
+        this.add.image(460, 420, 'per_happy')
+            .setOrigin(0)
+            .setDepth(2);
         this.anims.create({
             key: 'blinking_arrows',
             frames: this.anims.generateFrameNumbers('nextLevelArrows', {frames: [0, 1, 2]}),
@@ -181,7 +188,7 @@ export default class Level3 extends Phaser.Scene {
             .play('blinking_arrows')
             .setInteractive({useHandCursor: true})
             .on("pointerdown", () => {
-                this.scene.start('TheEnd')
+                this.scene.start('Level5')
             });
     }
 

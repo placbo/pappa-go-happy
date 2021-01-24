@@ -1,10 +1,5 @@
 import background_level3 from "./assets/background_level3.jpg";
-import palmTree from "./assets/tree.png";
-import axe from "./assets/axe.png";
 import stone from "./assets/stone_100.png";
-import stoneSmall from "./assets/stone20.png";
-import balloon from "./assets/balloon.png";
-import keyHint from "./assets/keyspng.png";
 import walk_sprites from "./assets/julie_spritecheet.png";
 import nextLevelArrowSheet from "./assets/next_level_arrows.png";
 
@@ -20,12 +15,7 @@ export default class Level4 extends Phaser.Scene {
 
     preload() {
         this.load.image('background_level3', background_level3);
-        this.load.image('axe', axe);
         this.load.image('stone', stone);
-        this.load.image('stoneSmall', stoneSmall);
-        this.load.image('palmTree', palmTree);
-        this.load.image('balloon', balloon);
-        this.load.image('keyHint', keyHint);
         this.load.spritesheet('julieSheet', walk_sprites, {frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('nextLevelArrows', nextLevelArrowSheet, {frameWidth: 100, frameHeight: 75});
     }
@@ -55,6 +45,7 @@ export default class Level4 extends Phaser.Scene {
         //this.stone = this.add.sprite(370, 190, 'stone')
         this.character = this.physics.add.sprite(this.startCoordinates.x, this.startCoordinates.y, 'julieSheet')
             .setGravityY(450)
+            .setScale(0.4)
             .setBounce(0.2)
             .setSize(50, 100)
             .setOffset(25, 0)
@@ -123,7 +114,7 @@ export default class Level4 extends Phaser.Scene {
 
 
             if (Phaser.Input.Keyboard.JustDown(this.cursors.up) && this.character.body.touching.down) {
-                this.character.setVelocityY(-250);
+                this.character.setVelocityY(-350);
                 this.character.anims.play('jump');
             }
         }

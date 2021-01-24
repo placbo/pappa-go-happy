@@ -8,6 +8,8 @@ import iverBored from "./assets/iverbored.png";
 import happyCouple from "./assets/JulieIver.png";
 import heart_sprites from "./assets/heart-sprite.png";
 import Phaser from "phaser";
+import per_sad from "./assets/per-sad.png";
+import per_happy from "./assets/per-happy.png";
 
 
 export default class Level2 extends Phaser.Scene {
@@ -23,11 +25,12 @@ export default class Level2 extends Phaser.Scene {
         this.load.image('background_level2', background_level2);
         this.load.image('julie', julie);
         this.load.image('arrow', arrow);
-        //this.load.image('nextLevelArrow', nextLevelArrow);
         this.load.image('cupid', cupid);
         this.load.image('cloud', cloud);
         this.load.image('iverBored', iverBored);
         this.load.image('happyCouple', happyCouple);
+        this.load.image('per_sad', per_sad);
+        this.load.image('per_happy', per_happy);
         this.load.spritesheet('heartSheet', heart_sprites, {frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('nextLevelArrows', nextLevelArrowSheet, {frameWidth: 100, frameHeight: 75});
     }
@@ -44,6 +47,9 @@ export default class Level2 extends Phaser.Scene {
         this.drawJulie();
         this.drawIverBored();
         this.drawCupid();
+        this.sad_per = this.add.image(600, 420, 'per_sad')
+            .setOrigin(0)
+            .setDepth(2);
         this.cloud = this.add.sprite(570, 80, 'cloud')
             .setOrigin(0)
             .setInteractive({useHandCursor: true});
@@ -101,7 +107,7 @@ export default class Level2 extends Phaser.Scene {
         //add animation on julie
         this.julie.scene.tweens.add({
             targets: this.julie,
-            x: 700,
+            x: 600,
             angle: 1080,
             duration: 5000,
             ease: 'Sine.easeInOut',
@@ -150,7 +156,10 @@ export default class Level2 extends Phaser.Scene {
     }
 
     level2Win() {
-        //TODO: show happyPer
+        this.sad_per.destroy();
+        this.add.image(460, 420, 'per_happy')
+            .setOrigin(0)
+            .setDepth(2);
         this.anims.create({
             key: 'blinking_arrows',
             frames: this.anims.generateFrameNumbers('nextLevelArrows', {frames: [0, 1, 2]}),

@@ -20,13 +20,13 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: {y: 0},
-            debug: true,
+/*            debug: true,
             debugShowBody: true,
             debugShowStaticBody: true,
             debugShowVelocity: true,
             debugVelocityColor: 0xffff00,
             debugBodyColor: 0x0000ff,
-            debugStaticBodyColor: 0xffffff
+            debugStaticBodyColor: 0xffffff*/
         }
     },
     scene: [Intro, Header, Level1, Level2, Level3, Level4, Level5, TheEnd]

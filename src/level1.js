@@ -2,6 +2,8 @@ import background_level1 from "./assets/background_level1.jpg";
 import booth from "./assets/booth.png";
 import target from "./assets/target.png";
 import gun from "./assets/gun.png";
+import per_happy from "./assets/per-happy.png";
+import per_sad from "./assets/per-sad.png";
 import nextLevelArrowSheet from "./assets/next_level_arrows.png";
 
 export default class Level1 extends Phaser.Scene {
@@ -17,6 +19,8 @@ export default class Level1 extends Phaser.Scene {
         this.load.image('booth', booth);
         this.load.image('target', target);
         this.load.image('gun', gun);
+        this.load.image('per_sad', per_sad);
+        this.load.image('per_happy', per_happy);
         this.load.spritesheet('nextLevelArrows', nextLevelArrowSheet, {frameWidth: 100, frameHeight: 75});
     }
 
@@ -28,6 +32,9 @@ export default class Level1 extends Phaser.Scene {
         this.add.image(0, 50, 'booth')
             .setOrigin(0)
             .setDepth(1);
+        this.sad_per = this.add.image(600, 420, 'per_sad')
+            .setOrigin(0)
+            .setDepth(2);
         this.gun = this.add.sprite(300, 610, "gun")
             .setScale(0.2)
             .setAngle(-30)
@@ -40,7 +47,10 @@ export default class Level1 extends Phaser.Scene {
 
     level1Win() {
         this.input.setDefaultCursor('default');
-        //TODO: show happyPer
+        this.sad_per.destroy();
+        this.add.image(460, 420, 'per_happy')
+            .setOrigin(0)
+            .setDepth(2);
         this.anims.create({
             key: 'blinking_arrows',
             frames: this.anims.generateFrameNumbers('nextLevelArrows', {frames: [0, 1, 2]}),
@@ -48,6 +58,7 @@ export default class Level1 extends Phaser.Scene {
             repeat: -1
         });
         this.add.sprite(700, 600, null)
+            .setDepth(3)
             .play('blinking_arrows')
             .setInteractive({useHandCursor: true})
             .on("pointerdown", () => {
