@@ -38,7 +38,7 @@ module.exports = {
       template: "./index.html"
     }),
     new CnameWebpackPlugin({
-      domain: 'mygame.kasselars.com',
+      domain: 'game.julielouise.me',
     }),
   ]
 };

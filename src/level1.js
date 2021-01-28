@@ -1,7 +1,7 @@
 import background_level1 from "./assets/background_level1.jpg";
 import booth from "./assets/booth.png";
 import target from "./assets/target.png";
-import gun from "./assets/gun.png";
+import rifle from "./assets/rifle.png";
 import per_happy from "./assets/per-happy.png";
 import per_sad from "./assets/per-sad.png";
 import nextLevelArrowSheet from "./assets/next_level_arrows.png";
@@ -18,7 +18,7 @@ export default class Level1 extends Phaser.Scene {
         this.load.image('background_level1', background_level1);
         this.load.image('booth', booth);
         this.load.image('target', target);
-        this.load.image('gun', gun);
+        this.load.image('rifle', rifle);
         this.load.image('per_sad', per_sad);
         this.load.image('per_happy', per_happy);
         this.load.spritesheet('nextLevelArrows', nextLevelArrowSheet, {frameWidth: 100, frameHeight: 75});
@@ -27,6 +27,8 @@ export default class Level1 extends Phaser.Scene {
     create() {
         let Header = this.scene.get('Header');
         Header.setLevelText("Level 1");
+        Header.setHintText("Hint: Click on things");
+
         this.add.image(0, 50, 'background_level1')
             .setOrigin(0);
         this.add.image(0, 50, 'booth')
@@ -35,13 +37,14 @@ export default class Level1 extends Phaser.Scene {
         this.sad_per = this.add.image(600, 420, 'per_sad')
             .setOrigin(0)
             .setDepth(2);
-        this.gun = this.add.sprite(300, 610, "gun")
-            .setScale(0.2)
-            .setAngle(-30)
+        this.rifle = this.add.sprite(300, 610, "rifle")
+            .setScale(0.4)
+            .setAngle(-5)
             .setInteractive({useHandCursor: true})
             .on("pointerup", () => {
+                Header.setHintText("Bra, Julie!");
                 this.drawTargetsAndStartShootingGame();
-                this.gun.destroy();
+                this.rifle.destroy();
             })
     }
 
