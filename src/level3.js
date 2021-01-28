@@ -3,7 +3,7 @@ import stone_small from "./assets/stone20.png";
 import walk_sprites from "./assets/julie_spritecheet.png";
 import dino1 from "./assets/dino1.png";
 import dino2 from "./assets/dino2.png";
-import oscar from "./assets/oscar.jpg";
+import oscar_glow from "./assets/oscar_glow.png";
 import nextLevelArrowSheet from "./assets/next_level_arrows.png";
 import balloon from "./assets/balloon.png";
 import platform from "./assets/platform.png";
@@ -23,7 +23,7 @@ export default class Level3 extends Phaser.Scene {
         this.load.image('stone_small', stone_small);
         this.load.image('dino1', dino1);
         this.load.image('dino2', dino2);
-        this.load.image('oscar', oscar);
+        this.load.image('oscar', oscar_glow);
         this.load.spritesheet('julieSheet', walk_sprites, {frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('nextLevelArrows', nextLevelArrowSheet, {frameWidth: 100, frameHeight: 75});
         this.load.image('balloon', balloon);
@@ -57,7 +57,7 @@ export default class Level3 extends Phaser.Scene {
             .setOffset(25, 0)
             .setCollideWorldBounds(true);
 
-        this.add.sprite(400, 140, 'oscar').setScale(0.4);
+        this.add.sprite(400, 128, 'oscar').setScale(0.4);
         this.stone1 = this.add.sprite(400, 350, 'stone_small');
         this.stone2 = this.add.sprite(370, 490, 'stone_small');
         this.stone3 = this.add.sprite(600, 635, 'stone_small');
