@@ -150,7 +150,6 @@ export default class Level3 extends Phaser.Scene {
     }
 
     level3Win() {
-        //TODO: show happyPer
         this.character.disableBody().visible = false;
         this.add.image(90, 328, 'julieSheet', 7).setScale(0.65);
         this.balloon.setPosition(118, 290).setScale(0.8);
